@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/global-rules.css">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
 <body>
@@ -24,8 +23,11 @@
                         <a id="downloadBtn" href="#" class="download-btn rounded" style="display: none;">
                             <div class="button-content">
                                 <div class="svg-container">
-                                    <svg class="download-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                        <path d="M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479 6.908l-4-4h3v-4h2v4h3l-4 4z"></path>
+                                    <svg class="download-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479 6.908l-4-4h3v-4h2v4h3l-4 4z">
+                                        </path>
                                     </svg>
                                 </div>
                                 <div class="text-container">
@@ -40,110 +42,28 @@
             </div>
             <div class="row justify-content-center">
                 <div class="column text-center">
-                    <img src="./images/card1.webp" alt="Nature" class="rounded w-75" style="height: 110px;" onclick="myFunction(this, 'imgtext1', 'Nature.jpg');">
+                    <img src="./images/card1.webp" alt="Nature" class="rounded w-75" style="height: 110px;"
+                        onclick="myFunction(this, 'imgtext1', 'Nature.jpg');">
                 </div>
                 <div class="column text-center">
-                    <img src="./images/card2.webp" alt="Snow" class="rounded w-75" style="height: 110px;" onclick="myFunction(this, 'imgtext2', 'Snow.jpg');">
+                    <img src="./images/card2.webp" alt="Snow" class="rounded w-75" style="height: 110px;"
+                        onclick="myFunction(this, 'imgtext2', 'Snow.jpg');">
                 </div>
             </div>
             <div class="py-3 text-center position-relative d-flex justify-content-center">
-              <div id="captureArea">
-                  <img id="expandedImg" style="width: 100%;height: 100%;" class="rounded">
-                  <div id="imgtext1" class="imgtext"></div>
-                  <div id="imgtext2" class="imgtext"></div>
-                  <div id="imgtext3" class="imgtext"></div>
-                  <div id="imgtext4" class="imgtext"></div>
-              </div>
-          </div>
+                <div id="captureArea">
+                    <img id="expandedImg" style="width: 100%;height: 100%;" class="rounded">
+                    <div id="imgtext1" class="imgtext"></div>
+                    <div id="imgtext2" class="imgtext"></div>
+                    <div id="imgtext3" class="imgtext"></div>
+                    <div id="imgtext4" class="imgtext"></div>
+                </div>
+            </div>
         </div>
     </section>
-
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
-    <script>
-        function myFunction(imgs, imgtextId, downloadFilename) {
-            var expandImg = document.getElementById("expandedImg");
-            var inputText = document.getElementById("inputText").value;
-
-            // Hide all text elements
-            var imgTexts = document.getElementsByClassName("imgtext");
-            for (var i = 0; i < imgTexts.length; i++) {
-                imgTexts[i].style.display = "none";
-            }
-
-            // Display the relevant text element and set its content
-            var imgText = document.getElementById(imgtextId);
-            imgText.innerHTML = inputText;
-            imgText.style.display = "block";
-
-            // Show the download button next to the input field
-            var downloadBtn = document.getElementById("downloadBtn");
-            downloadBtn.dataset.imgtextId = imgtextId; // Store the imgtextId for later use
-            downloadBtn.href = "#"; // Reset the href
-            downloadBtn.download = downloadFilename;
-            downloadBtn.style.display = "block";
-
-            expandImg.src = imgs.src;
-            expandImg.parentElement.style.display = "block";
-
-            // Remove active class from all images
-            var allImgs = document.querySelectorAll('.column img');
-            allImgs.forEach(function (img) {
-                img.classList.remove('active-tab');
-            });
-
-            // Add active class to the clicked image
-            imgs.classList.add('active-tab');
-        }
-
-        function updateText() {
-            var inputText = document.getElementById("inputText").value;
-            var imgText = document.querySelector('.imgtext:not([style*="display: none"])');
-
-            if (imgText) {
-                imgText.innerHTML = inputText;
-            }
-
-            // Show the download button if there's input text
-            var downloadBtn = document.getElementById("downloadBtn");
-            if (inputText.trim()) {
-                downloadBtn.style.display = "block";
-            } else {
-                downloadBtn.style.display = "none";
-            }
-        }
-
-        // Automatically activate the first image on page load
-        window.onload = function () {
-            var firstImg = document.querySelector('.column img');
-            if (firstImg) {
-                myFunction(firstImg, 'imgtext1', 'Nature.jpg');
-            }
-        }
-
-        // Add event listener to update text dynamically
-        document.getElementById('inputText').addEventListener('input', updateText);
-
-        // Capture the expanded image with text and download it
-        document.getElementById('downloadBtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            var captureArea = document.getElementById("captureArea");
-            var imgtextId = this.dataset.imgtextId;
-            var imgText = document.getElementById(imgtextId);
-            var inputText = document.getElementById("inputText").value;
-
-            // Ensure text is updated before capture
-            imgText.innerHTML = inputText;
-
-            // Use html2canvas to capture the image with the text
-            html2canvas(captureArea).then(function (canvas) {
-                // Create a link element to download the image
-                var link = document.createElement('a');
-                link.download = 'card.png';
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        });
-    </script>
+    <script src="./js/main.js"></script>
 
 </body>
 

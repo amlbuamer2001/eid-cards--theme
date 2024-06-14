@@ -1,184 +1,83 @@
-document.addEventListener("DOMContentLoaded", function() {
-    // Set the first image as active by default
-    var firstImage = document.querySelector(".column img");
-    if (firstImage) {
-      firstImage.click();
-    }
-  });
-  
-  function myFunction(imgs) {
+function myFunction(imgs, imgtextId, downloadFilename) {
     var expandImg = document.getElementById("expandedImg");
-    var imgText = document.getElementById("imgtext");
-    var inputText = document.getElementById("textInput").value;
-    var pos = imgs.getAttribute('data-pos');
-  
-    // Reset imgtext position
-    imgText.style.bottom = '';
-    imgText.style.left = '';
-    imgText.style.top = '';
-    imgText.style.right = '';
-  
-    // Set imgtext position based on data-pos attribute
-    switch(pos) {
-      case 'bottom-left':
-        imgText.style.bottom = '15px';
-        imgText.style.left = '15px';
-        break;
-      case 'top-right':
-        imgText.style.top = '15px';
-        imgText.style.right = '15px';
-        break;
-      case 'top-left':
-        imgText.style.top = '15px';
-        imgText.style.left = '15px';
-        break;
-      case 'bottom-right':
-        imgText.style.bottom = '15px';
-        imgText.style.right = '15px';
-        break;
+    var inputText = document.getElementById("inputText").value;
+
+    // Hide all text elements
+    var imgTexts = document.getElementsByClassName("imgtext");
+    for (var i = 0; i < imgTexts.length; i++) {
+        imgTexts[i].style.display = "none";
     }
-  
-    expandImg.src = imgs.src;
-    expandImg.setAttribute('data-pos', pos);  // Store pos in expandedImg
+
+    // Display the relevant text element and set its content
+    var imgText = document.getElementById(imgtextId);
     imgText.innerHTML = inputText;
-    imgText.style.display = inputText ? 'block' : 'none'; // Only display text if input is not empty
+    imgText.style.display = "block";
+
+    // Show the download button next to the input field
+    var downloadBtn = document.getElementById("downloadBtn");
+    downloadBtn.dataset.imgtextId = imgtextId; // Store the imgtextId for later use
+    downloadBtn.href = "#"; // Reset the href
+    downloadBtn.download = downloadFilename;
+    downloadBtn.style.display = "block";
+
+    expandImg.src = imgs.src;
     expandImg.parentElement.style.display = "block";
-  }
-  
-  function downloadImage() {
-    var expandImg = document.getElementById("expandedImg");
-    var inputText = document.getElementById("textInput").value;
-    var pos = expandImg.getAttribute('data-pos');
-  
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    
-    var image = new Image();
-    image.src = expandImg.src;
-  
-    image.onload = function() {
-      canvas.width = image.width;
-      canvas.height = image.height;
-  
-      // Draw image on canvas
-      ctx.drawImage(image, 0, 0);
-  
-      // Add text
-      if (inputText) {
-        ctx.font = "20px Arial";
-        ctx.fillStyle = "white";
-        switch(pos) {
-          case 'bottom-left':
-            ctx.fillText(inputText, 15, image.height - 15);
-            break;
-          case 'top-right':
-            ctx.fillText(inputText, image.width - ctx.measureText(inputText).width - 15, 30);
-            break;
-          case 'top-left':
-            ctx.fillText(inputText, 15, 30);
-            break;
-          case 'bottom-right':
-            ctx.fillText(inputText, image.width - ctx.measureText(inputText).width - 15, image.height - 15);
-            break;
-        }
-      }
-  
-      // Create a link and set the download attribute to the canvas data URL
-      var link = document.createElement('a');
-      link.href = canvas.toDataURL("image/png");
-      link.download = 'image_with_text.png';
-      link.click();
-    }
-  }
-document.addEventListener("DOMContentLoaded", function() {
-  // Set the first image as active by default
-  var firstImage = document.querySelector(".col-3 img");
-  if (firstImage) {
-    firstImage.click();
-  }
-});
 
-function myFunction(imgs) {
-  var expandImg = document.getElementById("expandedImg");
-  var imgText = document.getElementById("imgtext");
-  var inputText = document.getElementById("textInput").value;
-  var pos = imgs.getAttribute('data-pos');
+    // Remove active class from all images
+    var allImgs = document.querySelectorAll('.column img');
+    allImgs.forEach(function (img) {
+        img.classList.remove('active-tab');
+    });
 
-  // Reset imgtext position
-  imgText.style.bottom = '';
-  imgText.style.left = '';
-  imgText.style.top = '';
-  imgText.style.right = '';
-
-  // Set imgtext position based on data-pos attribute
-  switch(pos) {
-    case 'bottom-left':
-      imgText.style.bottom = '15px';
-      imgText.style.left = '15px';
-      break;
-    case 'top-right':
-      imgText.style.top = '15px';
-      imgText.style.right = '15px';
-      break;
-    case 'top-left':
-      imgText.style.top = '15px';
-      imgText.style.left = '15px';
-      break;
-    case 'bottom-right':
-      imgText.style.bottom = '15px';
-      imgText.style.right = '15px';
-      break;
-  }
-
-  expandImg.src = imgs.src;
-  expandImg.setAttribute('data-pos', pos);  // Store pos in expandedImg
-  imgText.innerHTML = inputText;
-  imgText.style.display = inputText ? 'block' : 'none'; // Only display text if input is not empty
-  expandImg.parentElement.style.display = "block";
+    // Add active class to the clicked image
+    imgs.classList.add('active-tab');
 }
 
-function downloadImage() {
-  var expandImg = document.getElementById("expandedImg");
-  var inputText = document.getElementById("textInput").value;
-  var pos = expandImg.getAttribute('data-pos');
+function updateText() {
+    var inputText = document.getElementById("inputText").value;
+    var imgText = document.querySelector('.imgtext:not([style*="display: none"])');
 
-  var canvas = document.createElement('canvas');
-  var ctx = canvas.getContext('2d');
-  
-  var image = new Image();
-  image.src = expandImg.src;
-
-  image.onload = function() {
-    canvas.width = image.width;
-    canvas.height = image.height;
-
-    // Draw image on canvas
-    ctx.drawImage(image, 0, 0);
-
-    // Add text
-    if (inputText) {
-      ctx.font = "20px Arial";
-      ctx.fillStyle = "white";
-      switch(pos) {
-        case 'bottom-left':
-          ctx.fillText(inputText, 15, image.height - 15);
-          break;
-        case 'top-right':
-          ctx.fillText(inputText, image.width - ctx.measureText(inputText).width - 15, 30);
-          break;
-        case 'top-left':
-          ctx.fillText(inputText, 15, 30);
-          break;
-        case 'bottom-right':
-          ctx.fillText(inputText, image.width - ctx.measureText(inputText).width - 15, image.height - 15);
-          break;
-      }
+    if (imgText) {
+        imgText.innerHTML = inputText;
     }
 
-    // Create a link and set the download attribute to the canvas data URL
-    var link = document.createElement('a');
-    link.href = canvas.toDataURL("image/png");
-    link.download = 'image_with_text.png';
-    link.click();
-  }
-}  
+    // Show the download button if there's input text
+    var downloadBtn = document.getElementById("downloadBtn");
+    if (inputText.trim()) {
+        downloadBtn.style.display = "block";
+    } else {
+        downloadBtn.style.display = "none";
+    }
+}
+
+// Automatically activate the first image on page load
+window.onload = function () {
+    var firstImg = document.querySelector('.column img');
+    if (firstImg) {
+        myFunction(firstImg, 'imgtext1', 'Nature.jpg');
+    }
+}
+
+// Add event listener to update text dynamically
+document.getElementById('inputText').addEventListener('input', updateText);
+
+// Capture the expanded image with text and download it
+document.getElementById('downloadBtn').addEventListener('click', function (e) {
+    e.preventDefault();
+    var captureArea = document.getElementById("captureArea");
+    var imgtextId = this.dataset.imgtextId;
+    var imgText = document.getElementById(imgtextId);
+    var inputText = document.getElementById("inputText").value;
+
+    // Ensure text is updated before capture
+    imgText.innerHTML = inputText;
+
+    // Use html2canvas to capture the image with the text
+    html2canvas(captureArea).then(function (canvas) {
+        // Create a link element to download the image
+        var link = document.createElement('a');
+        link.download = 'card.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
+});
